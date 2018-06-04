@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
 <!-- Head BEGIN -->
 <head>
   <meta charset="utf-8">
@@ -81,7 +81,8 @@
         <div class="header-navigation menu-right">
           <ul>
             <li><a href="#">账号管理 </a></li>
-            <li><a href="login.html">退出</a></li>
+            <li><form th:action="@{/logout}" method="post"><input type="submit" value="Logout"></form></li>
+            <li><a href="logout" th:href="@{/logout}">退出</a></li>
             <li><img src="assets/corporate/img/user.jpg" class="user_avatar"></li>
           </ul>
         </div>
