@@ -56,7 +56,7 @@ public class AppUserDetailsServiceDAO implements UserDetailsService {
 			@Override
 			public Collection<? extends GrantedAuthority> getAuthorities() {
 				List<SimpleGrantedAuthority> auths = new java.util.ArrayList<>();
-				auths.add(new SimpleGrantedAuthority("ROLE_USER"));
+				auths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 				return auths;
 			}
 		};

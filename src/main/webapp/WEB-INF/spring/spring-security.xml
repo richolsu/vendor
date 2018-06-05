@@ -1,44 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/security"
-	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+<beans:beans
+  xmlns="http://www.springframework.org/schema/security"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <beans:bean id="accessDecisionManager"
-      class="org.springframework.security.access.vote.AffirmativeBased">
-      <beans:constructor-arg>
-        <beans:list>
-          <beans:bean
-            class="org.springframework.security.access.vote.RoleVoter" />
-          <beans:bean
-            class="org.springframework.security.web.access.expression.WebExpressionVoter" />
-        </beans:list>
-      </beans:constructor-arg>
-    </beans:bean>
-    
-    <beans:bean id ="passwordEncoder" class = "org.springframework.security.crypto.password.NoOpPasswordEncoder" factory-method = "getInstance" />
+  <beans:bean id="accessDecisionManager"
+    class="org.springframework.security.access.vote.AffirmativeBased">
+    <beans:constructor-arg>
+      <beans:list>
+        <beans:bean
+          class="org.springframework.security.access.vote.RoleVoter" />
+        <beans:bean
+          class="org.springframework.security.web.access.expression.WebExpressionVoter" />
+      </beans:list>
+    </beans:constructor-arg>
+  </beans:bean>
 
-	<http authentication-manager-ref="dao-auth"
-		access-decision-manager-ref="accessDecisionManager">	
-        <intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')" />
-		<form-login login-page="/signin" authentication-failure-url="/signin?error=1"
-			username-parameter="username" password-parameter="password"
-			default-target-url="/" />
-		<logout invalidate-session="true" logout-success-url="/signin?logout"
-			logout-url="/logout" />
-		<access-denied-handler error-page="/denied"/>
-		<session-management invalid-session-url="/signin">
-			<concurrency-control max-sessions="1"
-				expired-url="/signin" />
-		</session-management>
-	</http>
+  <beans:bean id="passwordEncoder"
+    class="org.springframework.security.crypto.password.NoOpPasswordEncoder"
+    factory-method="getInstance" />
 
-	<authentication-manager id="dao-auth">
-		<authentication-provider user-service-ref="userDetailsService">
-		</authentication-provider>
-	</authentication-manager>
+  <http authentication-manager-ref="dao-auth"
+    access-decision-manager-ref="accessDecisionManager">
+    <intercept-url pattern="/admin"
+      access="hasRole('ROLE_ADMIN')" />
+    <form-login login-page="/signin"
+      authentication-failure-url="/signin?error=1"
+      username-parameter="username" password-parameter="password"
+      default-target-url="/" />
+    <logout invalidate-session="true"
+      logout-success-url="/signin?logout" logout-url="/logout" />
+    <access-denied-handler error-page="/denied" />
+    <remember-me key="uniqueAndSecret" />
+    <session-management invalid-session-url="/signin">
+      <concurrency-control max-sessions="1"
+        expired-url="/signin" />
+    </session-management>
+  </http>
 
-	<beans:bean id="userDetailsService"
-		class="com.srm.platform.vendor.security.AppUserDetailsServiceDAO" />
+  <authentication-manager id="dao-auth">
+    <authentication-provider
+      user-service-ref="userDetailsService">
+    </authentication-provider>
+  </authentication-manager>
+
+  <beans:bean id="userDetailsService"
+    class="com.srm.platform.vendor.security.AppUserDetailsServiceDAO" />
 
 </beans:beans>
